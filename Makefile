@@ -1,25 +1,18 @@
 
+# On MacOS, install raylib with homebrew
+# On Linux, it is part of the source code of this project
+# On Windows, I really don't care what you do, but I'm not doing anything
+
 ifeq ($(shell uname -s), Darwin)
 	CC ?= clang
+	RAYLIB = `pkg-config --cflags --libs raylib`
 else
 	CC ?= gcc
+	RAYLIB = -L./raylib-5.0_linux_amd64/lib/ -l:libraylib.a -lm -I./raylib-5.0_linux_amd64/include/
 endif
 
-RAYLIB = `pkg-config --libs raylib`
+app: app.c
+	$(CC) app.c $(RAYLIB) -o app
 
-EXE = app
-
-SRC = $(wildcard *.c)
-OBJ = $(SRC:.d=.o)
-
-$(EXE): $(OBJ)
-	$(CC) $(OBJ) $(RAYLIB) -o $(EXE)
-
-%.o: %.d
-	$(DCOMP) $< -o $@ $(RAYLIB)
-
-run: $(EXE)
-	./$(EXE)
-
-clean:
-	rm -f $(OBJ) $(EXE)
+run: app
+	./app
