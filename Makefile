@@ -11,8 +11,13 @@ else
 	RAYLIB = -L./raylib-5.0_linux_amd64/lib/ -l:libraylib.a -lm -I./raylib-5.0_linux_amd64/include/
 endif
 
-app: app.c
-	$(CC) app.c $(RAYLIB) -o app
+SRCS = $(wildcard *.c)
+EXECS = $(SRCS:.c=)
 
-run: app
-	./app
+all: $(EXECS)
+
+%: %.c
+	$(CC) $< $(RAYLIB) -o $@
+
+clean:
+	rm -f $(EXECS)
