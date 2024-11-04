@@ -12,11 +12,11 @@ else
 endif
 
 SRCS = $(wildcard *.c)
-EXECS = $(SRCS:.c=)
+EXECS = $(SRCS:.c=.exe)
 
 all: $(EXECS)
 
-%: %.c
+%.exe: %.c
 	$(CC) $< $(RAYLIB) -o $@
 
 clean:

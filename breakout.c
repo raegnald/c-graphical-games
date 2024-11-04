@@ -115,10 +115,13 @@ int main(void) {
   InitAudioDevice();
   SetTargetFPS(FPS);
 
-  kick = LoadSound("./kick.mp3");
-  hihat = LoadSound("./hihat.mp3");
+  kick = LoadSound("./sound/kick.mp3");
+  hihat = LoadSound("./sound/hihat.mp3");
 
-  Music loop = LoadMusicStream("./retro-wave.mp3");
+  SetSoundVolume(kick, 0.5);
+  SetSoundVolume(hihat, 0.4);
+
+  Music loop = LoadMusicStream("./sound/retro-wave.mp3");
   
   PlayMusicStream(loop);
   
