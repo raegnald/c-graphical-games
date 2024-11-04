@@ -105,8 +105,14 @@ int main(void) {
   
   srand(time(NULL));
   InitWindow(WIN_W, WIN_H, "Breakout C");
+  InitAudioDevice();
   SetTargetFPS(FPS);
 
+  Sound kick = LoadSound("./kick.wav");
+  Music groove = LoadMusicStream("./groove.wav");
+  
+  PlayMusicStream(groove);
+  
   Block blocks[AMOUNT_BLOCK_ROWS][BLOCKS_PER_ROW];
   Racket racket = {0};
   Ball ball = {
@@ -135,12 +141,15 @@ int main(void) {
     BeginDrawing();
     ClearBackground(game_won ? DARKGREEN : game_active ? BLACK : RED);
 
+    UpdateMusicStream(groove);
+
     size_t blocks_alive, row;
     for (blocks_alive = 0, row = 0; row < AMOUNT_BLOCK_ROWS && !game_won; row++) {
       for (size_t col = 0; col < BLOCKS_PER_ROW; col++) {
         Block *block = &blocks[row][col];
         if (!block->hit) {
           if (check_ball_block_collision(&ball, block)) {
+            PlaySound(kick);
             block->hit = true;
             score++;
           }
