@@ -40,6 +40,8 @@ typedef struct {
   float start;                  /* Left of the racket (x-axis) */
 } Racket;                       /* Player's racket */
 
+Sound kick, hihat;
+
 void draw_block(const Block *b) {
   DrawRectangleRec(b->rect, b->color);
 }
@@ -67,14 +69,19 @@ void update_ball(Ball *b, Racket *racket, bool *game_active) {
   };
 
   if (CheckCollisionCircleRec(b->center, BALL_RADIUS, racket_rect)) {
+    PlaySound(hihat);
     b->vel.y *= -1;
   }
   
-  if (b->center.x - BALL_RADIUS < 0 || b->center.x + BALL_RADIUS > WIN_W)
+  if (b->center.x - BALL_RADIUS < 0 || b->center.x + BALL_RADIUS > WIN_W) {
+    PlaySound(hihat);
     b->vel.x *= -1;
+  }
 
-  if (b->center.y - BALL_RADIUS < 0)
+  if (b->center.y - BALL_RADIUS < 0) {
+    PlaySound(hihat);
     b->vel.y *= -1;
+  }
 
   if (b->center.y + BALL_RADIUS > WIN_H)
     *game_active = false;
@@ -108,10 +115,12 @@ int main(void) {
   InitAudioDevice();
   SetTargetFPS(FPS);
 
-  Sound kick = LoadSound("./kick.wav");
-  Music groove = LoadMusicStream("./groove.wav");
+  kick = LoadSound("./kick.mp3");
+  hihat = LoadSound("./hihat.mp3");
+
+  Music loop = LoadMusicStream("./retro-wave.mp3");
   
-  PlayMusicStream(groove);
+  PlayMusicStream(loop);
   
   Block blocks[AMOUNT_BLOCK_ROWS][BLOCKS_PER_ROW];
   Racket racket = {0};
@@ -141,7 +150,7 @@ int main(void) {
     BeginDrawing();
     ClearBackground(game_won ? DARKGREEN : game_active ? BLACK : RED);
 
-    UpdateMusicStream(groove);
+    UpdateMusicStream(loop);
 
     size_t blocks_alive, row;
     for (blocks_alive = 0, row = 0; row < AMOUNT_BLOCK_ROWS && !game_won; row++) {
@@ -178,8 +187,10 @@ int main(void) {
 
     if (game_won)
       DrawText("You won!", 10, 30, 50, WHITE);
-    else if (!game_active)
+    else if (!game_active) {
+      StopMusicStream(loop);
       DrawText("Game over", 10, 30, 50, WHITE);
+    }
 
     EndDrawing();
   }
