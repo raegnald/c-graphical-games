@@ -112,7 +112,12 @@ int main(void) {
 
   srand(time(NULL));
   InitWindow(WIN_W, WIN_H, "Flappy Bird C");
+  InitAudioDevice();
   SetTargetFPS(FPS);
+
+  Sound bird_sound = LoadSound("./sound/bird.mp3");
+  Music song = LoadMusicStream("./sound/rush-e.mp3");
+  PlayMusicStream(song);
 
   Bird bird = {
     .ypos = (float) WIN_H / 2,
@@ -130,7 +135,11 @@ int main(void) {
     BeginDrawing();
     ClearBackground(game_active ? WHITE : RED);
 
-    if (IsKeyDown(KEY_SPACE)) {
+    UpdateMusicStream(song);
+
+    if (IsKeyDown(KEY_SPACE) && game_active) {
+      SetSoundVolume(bird_sound, 0.1 * (1 + rand() % 10));
+      PlaySound(bird_sound);
       bird.vel -= PROJECTILE_VEL;
     }
 
@@ -156,6 +165,7 @@ int main(void) {
              game_active ? BLUE : WHITE);
 
     if (!game_active) {
+      SetMasterVolume(0.2);
       DrawText("Game over", BIRD_OFFSET, BIRD_OFFSET, 50, WHITE);
     }
 

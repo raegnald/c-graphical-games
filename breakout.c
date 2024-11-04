@@ -187,11 +187,11 @@ int main(void) {
     DrawText(TextFormat("%lu destroyed", score), 10, 10, 20,
              game_active ? YELLOW : WHITE);
 
-
     if (game_won)
       DrawText("You won!", 10, 30, 50, WHITE);
     else if (!game_active) {
-      StopMusicStream(loop);
+      /* StopMusicStream(loop); */
+      SetMasterVolume(0.33);
       DrawText("Game over", 10, 30, 50, WHITE);
     }
 
