@@ -72,7 +72,7 @@ void update_ball(Ball *b, Racket *racket, bool *game_active) {
     PlaySound(hihat);
     b->vel.y *= -1;
   }
-  
+
   if (b->center.x - BALL_RADIUS < 0 || b->center.x + BALL_RADIUS > WIN_W) {
     PlaySound(hihat);
     b->vel.x *= -1;
@@ -101,7 +101,7 @@ bool check_ball_block_collision(Ball *ball, Block *block) {
     if (fabs(ball->vel.y) < 10)
       ball->vel.y *= 1.1;
   }
-  
+
   return collide;
 }
 
@@ -109,7 +109,7 @@ int main(void) {
   bool game_active = true;
   bool game_won = false;
   size_t score = 0;
-  
+
   srand(time(NULL));
   InitWindow(WIN_W, WIN_H, "Breakout C");
   InitAudioDevice();
@@ -122,9 +122,9 @@ int main(void) {
   SetSoundVolume(hihat, 0.4);
 
   Music loop = LoadMusicStream("./sound/retro-wave.mp3");
-  
+
   PlayMusicStream(loop);
-  
+
   Block blocks[AMOUNT_BLOCK_ROWS][BLOCKS_PER_ROW];
   Racket racket = {0};
   Ball ball = {
@@ -173,7 +173,7 @@ int main(void) {
     if (blocks_alive == 0) game_won = true;
 
     /* Updating racket position based on mouse */
-    racket.start = (float) (GetMouseX() - RACKET_WIDTH / 2);
+    racket.start = (float) GetMouseX() - (float) RACKET_WIDTH / 2;
 
     /* Checking bounds for racket position */
     if (racket.start < 0) racket.start = 0;
@@ -183,7 +183,7 @@ int main(void) {
 
     if (game_active && !game_won) update_ball(&ball, &racket, &game_active);
     draw_ball(&ball);
-    
+
     DrawText(TextFormat("%lu destroyed", score), 10, 10, 20,
              game_active ? YELLOW : WHITE);
 

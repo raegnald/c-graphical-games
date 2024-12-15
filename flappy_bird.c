@@ -10,8 +10,8 @@
 #define BIRD_OFFSET 50          /* Bird's offset relative to the left
                                    border of the window */
 #define BIRD_SIZE 10            /* Bird's size (square) */
-#define GRAVITY 0.4             /* Measured in pixels per frame */
-#define PROJECTILE_VEL 2        /* Velocity at which the bird goes up
+#define GRAVITY 0.85            /* Measured in pixels per frame */
+#define PROJECTILE_VEL 1.4      /* Velocity at which the bird goes up
                                    when space key is preddes */
 #define BARRIER_SPEED 1         /* Measured in pixels per frame */
 #define BARRIER_SEPARATION 300
@@ -29,7 +29,7 @@ typedef struct {
 /** A barrier with a hole that the bird must pass */
 typedef struct {
   float xpos;                   /* X position of the hole in the
-                                   screen */
+                                   screen */ 
   float hole_start;             /* Y coordinate of the beginning of
                                    the hole */
   float hole_height;            /* The size of the hole */
@@ -138,7 +138,7 @@ int main(void) {
     UpdateMusicStream(song);
 
     if (IsKeyDown(KEY_SPACE) && game_active) {
-      SetSoundVolume(bird_sound, 0.1 * (1 + rand() % 10));
+      SetSoundVolume(bird_sound, 0.05 * (1 + rand() % 5));
       PlaySound(bird_sound);
       bird.vel -= PROJECTILE_VEL;
     }
